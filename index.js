@@ -1,11 +1,15 @@
 const express = require('express');
+const cors = require('cors');  // Importamos el paquete CORS
 const app = express();
 const port = process.env.PORT || 3000;
+
+// Configuración de CORS para permitir solicitudes desde cualquier origen
+app.use(cors());  // Esto permite solicitudes desde cualquier origen por defecto
 
 // Middleware para manejar JSON
 app.use(express.json());
 
-// Ruta para validar la clave de licencia (simulando siempre una respuesta válida)
+// Ruta para validar la clave de licencia
 app.post('/validate-license', (req, res) => {
     const { license_key, user_id } = req.body;
 
