@@ -9,6 +9,17 @@ app.use(cors());
 // Middleware para manejar JSON
 app.use(express.json());
 
+// Manejar errores de JSON inválido
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        return res.status(400).json({
+            valid: false,
+            message: 'Invalid JSON'
+        });
+    }
+    next();
+});
+
 // Ruta para validar la clave de licencia
 app.post('/api/v1/validate', (req, res) => {
     // Recibir los datos de la solicitud
