@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // Ruta para validar la clave de licencia
-app.post('/validate', (req, res) => {
+app.post('/api/v1/validate', (req, res) => {
     // Recibir los datos de la solicitud
     const { sub_key, unique_id, mo_no, slug, b_version, r_id } = req.body;
 
