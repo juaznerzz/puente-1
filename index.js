@@ -1,36 +1,41 @@
-const express = require('express');
-const cors = require('cors');
-const app = express();
-const port = process.env.PORT || 3000;
+const express = require ( 'express' );
+constante cors = require ( 'cors' );
+const aplicación = express ();
+const puerto =
+ proceso.env.PORT || 3000 ;​
 
 // Configuración de CORS para permitir solicitudes de cualquier origen
-app.use(cors());
+aplicación. uso ( cors ());
 
 // Middleware para manejar JSON
-app.use(express.json());
+aplicación.use (express.json ( ))
+ ;
 
 // Ruta para validar la clave de licencia
-app.post('/api/v1/validate', (req, res) => {
+aplicación.post ( '/api/ v1 /validate' , ( req, res ) => {
     // Recibir los datos de la solicitud
-    const { sub_key, unique_id, mo_no, slug, b_version, r_id } = req.body;
+    const { sub_clave, id_único, mo_no, slug, b_version, r_id } = cuerpo requerido ;
+    // slug, b_version y r_id se reciben del cliente pero no se
+    // validados en el servidor. Están reservados para uso futuro y actualmente...
+    // ignorado en la lógica de validación.
 
     // Verificar si la clave de licencia y el ID de usuario son correctos
-    if (sub_key === "123456" && unique_id === "KH6kRZbbMwGZNpP7BZfubCG7sBhx9yJBYYAauyuN5EXKCHP" && mo_no === "593961758817") {
+    if (sub_key === "123456" && Unique_id === "KH6kRZbbMwGZNpP7BZfubCG7sBhx9yJBYYAauyuN5EXKCHP" && mo_no === "593961758817" ) {
         // Si es válido, devolver un estado 200 y el mensaje de éxito
-        return res.status(200).json({
-            valid: true,
-            message: 'License validated successfully'
+        devolver res. estado ( 200 ) .json ({
+            válido : verdadero ,
+            Mensaje : 'Licencia validada exitosamente'
         });
     }
 
     // Si no es válido, devolver un error 400 y el mensaje de error
-    return res.status(400).json({
-        valid: false,
-        message: 'Invalid license or user ID'
+    devolver res. estado ( 400 ) .json ({
+        válido : falso ,
+        Mensaje : 'Licencia o ID de usuario no válidos'
     });
 });
 
 // Iniciar el servidor
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+aplicación. escuchar (puerto, () => {
+    console.log ( `Servidor ejecutándose en el puerto $ {port} ` ) ;
 });
