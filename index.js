@@ -1,34 +1,18 @@
+// index.js
 const express = require('express');
 const cors = require('cors');
-const moment = require('moment'); // Usamos moment para manejar fechas
 
 const app = express();
-app.use(cors());                 // Permitir solicitudes desde la extensión
-app.use(express.json());         // Parsear JSON
+app.use(cors());
+app.use(express.json());
 
-// Función para generar el timestamp y verificar que la clave es válida
-function getTimestamp() {
-  const expirationDate = moment("2025-06-19T23:59:59Z"); // Fecha de caducidad
-  const currentDate = moment();
-
-  // Comprobar si la fecha actual es antes de la fecha de expiración
-  if (currentDate.isBefore(expirationDate)) {
-    return currentDate.toISOString(); // Marca de tiempo actual en formato ISO
-  } else {
-    return null; // Si la fecha ha pasado, no es válida
-  }
+// Simple example of license validation.
+// Replace this with your own mechanism (database check, etc.).
+function isLicenseValid(subKey) {
+  const validKey = process.env.VALID_KEY || 'demo-123';
+  return subKey === validKey;
 }
 
-// Función para validar la clave de licencia
-function isLicenseValid({ sub_key, mo_no }) {
-  const validKey = '123456';  // Clave válida
-  const validMoNo = '593961758817'; // Número de usuario válido
-  
-  // Verificar si la clave y el número de usuario coinciden
-  return sub_key === validKey && mo_no === validMoNo;
-}
-
-// Ruta principal de validación
 app.post('/api/v1/validate', (req, res) => {
   const {
     sub_key,
@@ -40,24 +24,24 @@ app.post('/api/v1/validate', (req, res) => {
     skd_id,
   } = req.body || {};
 
-  // Verificar que el cuerpo sea válido
+  // Ensure JSON body exists
   if (!req.body || typeof req.body !== 'object') {
     return res.status(400).json({ valid: false, error: 'JSON malformado' });
   }
 
-  // Comprobar que los parámetros estén completos
+  // Check that all required fields are present
   if (!sub_key || !unique_id || !mo_no || !slug || !b_version || !r_id) {
     return res.status(400).json({ valid: false, error: 'Parámetros incompletos' });
   }
 
-  // Validar la clave
-  if (!isLicenseValid(req.body)) {
+  // Validate the license key
+  if (!isLicenseValid(sub_key)) {
     return res.status(400).json({ valid: false });
   }
 
-  // Estructura esperada por la extensión
+  // Structure expected by the extension
   const dData = {
-    timestamp: Date.now(), // Marca de tiempo actual
+    timestamp: Date.now(),
     userDeviceData: {
       sub_key,
       device_data: { skd_id: skd_id || unique_id },
@@ -66,11 +50,11 @@ app.post('/api/v1/validate', (req, res) => {
 
   return res.status(200).json({
     valid: true,
-    dData, // Retornar la respuesta con la clave validada
+    dData,
   });
 });
 
-// Manejo de JSON malformado
+// Error handler for malformed JSON
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
     return res.status(400).json({ valid: false, error: 'JSON malformado' });
@@ -82,4 +66,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en el puerto ${PORT}`);
 });
+
 
