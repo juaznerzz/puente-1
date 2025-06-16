@@ -8,7 +8,7 @@ app.use(express.json());         // Parsear JSON
 
 // Función para generar el timestamp y verificar que la clave es válida
 function getTimestamp() {
-  const expirationDate = moment("2025-06-17T23:59:59Z"); // Fecha de caducidad
+  const expirationDate = moment("2025-06-19T23:59:59Z"); // Fecha de caducidad
   const currentDate = moment();
 
   // Comprobar si la fecha actual es antes de la fecha de expiración
@@ -21,9 +21,10 @@ function getTimestamp() {
 
 // Función para validar la clave de licencia
 function isLicenseValid({ sub_key, mo_no }) {
-  const validKey = '123456';
-  const validMoNo = '593961758817';
+  const validKey = '123456';  // Clave válida
+  const validMoNo = '593961758817'; // Número de usuario válido
   
+  // Verificar si la clave y el número de usuario coinciden
   return sub_key === validKey && mo_no === validMoNo;
 }
 
@@ -35,7 +36,8 @@ app.post('/api/v1/validate', (req, res) => {
     mo_no,
     slug,
     b_version,
-    r_id
+    r_id,
+    skd_id,
   } = req.body || {};
 
   // Verificar que el cuerpo sea válido
@@ -49,31 +51,23 @@ app.post('/api/v1/validate', (req, res) => {
   }
 
   // Validar la clave
-  if (isLicenseValid(req.body)) {
-    const timestamp = getTimestamp(); // Obtenemos el timestamp actual
-
-    // Si el timestamp es válido, respondemos con la validación
-    if (timestamp) {
-      return res.status(200).json({
-        valid: true,
-        timestamp: timestamp,
-        userDeviceData: {
-          sub_key,
-          unique_id,
-          mo_no,
-          slug,
-          b_version,
-          r_id
-        }
-      });
-    } else {
-      // Si el timestamp ha expirado, respondemos con un error
-      return res.status(400).json({ valid: false, error: 'La clave ha expirado' });
-    }
+  if (!isLicenseValid(req.body)) {
+    return res.status(400).json({ valid: false });
   }
 
-  // Si la clave no es válida
-  return res.status(400).json({ valid: false });
+  // Estructura esperada por la extensión
+  const dData = {
+    timestamp: Date.now(), // Marca de tiempo actual
+    userDeviceData: {
+      sub_key,
+      device_data: { skd_id: skd_id || unique_id },
+    },
+  };
+
+  return res.status(200).json({
+    valid: true,
+    dData, // Retornar la respuesta con la clave validada
+  });
 });
 
 // Manejo de JSON malformado
@@ -88,3 +82,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en el puerto ${PORT}`);
 });
+
