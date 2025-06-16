@@ -14,7 +14,7 @@ app.post('/api/v1/validate', (req, res) => {
     const { license_key, user_id } = req.body;
 
     // Validación: si la clave es 123456a y el ID es 593961758817
-    if (license_key === "123456a" && user_id === "593961758817") {
+    if (license_key === "123456" && user_id === "593961758817") {
         return res.status(200).json({ valid: true });
     }
 
