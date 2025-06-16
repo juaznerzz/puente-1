@@ -11,14 +11,14 @@ app.use(express.json());
 
 // Ruta para validar la clave de licencia
 app.post('/api/v1/validate', (req, res) => {
-    const { license_key, user_id } = req.body;
+    const { sub_key, unique_id } = req.body;
 
-    // Validación: si la clave es 123456a y el ID es 593961758817
-    if (license_key === "123456" && user_id === "593961758817") {
-        return res.status(200).json({ valid: true });
+    // Validación: Verificar si la clave de licencia y el ID de usuario son correctos
+    if (sub_key === "123456" && unique_id === "KH6kRZbbMwGZNpP7BZfubCG7sBhx9yJBYYAauyuN5EXKCHP") {
+        return res.status(200).json({ valid: true });  // Respuesta válida
     }
 
-    // Si no coincide, devuelve error 400
+    // Si no coincide, devolver error 400
     return res.status(400).json({ valid: false, message: 'Invalid license or user ID' });
 });
 
