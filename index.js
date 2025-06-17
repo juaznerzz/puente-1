@@ -1,42 +1,38 @@
-const express = require('express');
-const cors = require('cors');
-const app = express();
-app.use(cors());
-app.use(express.json());
+const express = require ( 'express' );
+constante cors = require ( 'cors' );
 
-const VALID_KEY = process.env.VALID_KEY || '123456';
+const aplicación = express ();
+const PUERTO =
+ proceso.env.PUERTO || 3000 ;​​ 
 
-app.post('/api/v1/validate', (req, res) => {
-  const { sub_key, unique_id, mo_no, slug, b_version, r_id } = req.body || {};
+aplicación. uso ( cors ());
+aplicación.use (express.json ( ))
+ ;
 
-  if (!sub_key) {
-    return res.status(400).json({ valid: false, error: 'sub_key is required' });
-  }
-
-  if (sub_key !== VALID_KEY) {
-    return res.status(400).json({ valid: false, error: 'invalid key' });
-  }
-
-  const response = {
-    valid: true,
-    timestamp: Date.now(),
-    userDeviceData: {
-      unique_id,
-      mo_no,
-      slug,
-      b_version,
-      r_id,
-    },
+aplicación.post ( '/api/ v1 /validate' , ( req, res ) => {
+  const { sub_clave, id_único, slug, mo_no, b_version, r_id } = cuerpo requerido ;
+  // En una implementación real, validarías la carga útil.
+  // Aquí simplemente devolvemos una respuesta de muestra.
+  constante userDeviceData = {
+    sub_clave,
+    id único,
+    babosa,
+    mononucleosis infecciosa,
+    b_versión,
+    deshacerse,
+    validado : verdadero ,
   };
-
-  res.json(response);
+  // Incluya un campo de estado para que la extensión pueda verificar que la solicitud fue exitosa
+  res. status ( 200 ) .json ({ status : 200 , userDeviceData });
 });
 
-app.use((req, res) => {
-  res.status(404).json({ error: 'Not found' });
+aplicación.get ( '/api/v1/subscription-key/remove' , ( req, res ) = >
+ {
+  const { id, tipo } = consulta req .;
+  // En una implementación real, eliminarías la licencia por id/tipo.
+  res. json ({ estado : 200 , mensaje : 'Licencia eliminada' });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+aplicación. escuchar ( PUERTO , () => {
+  console.log ( `Servidor escuchando en el puerto $ {PORT} ` ) ;
 });
