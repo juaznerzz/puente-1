@@ -1,35 +1,39 @@
 const express = require('express');
-const cors = require('cors');
-
 const app = express();
-app.use(cors());
+const PORT = process.env.PORT || 3000;
+const VALID_KEY = process.env.VALID_KEY || '123456';
+
 app.use(express.json());
 
-// Simple subscription key for demo purposes
-const VALID_SUB_KEY = '123456';
+app.post('/validate', (req, res) => {
+  const { sub_key, unique_id, slug, mo_no, b_version, r_id } = req.body || {};
 
-app.post('/api/v1/validate', (req, res) => {
-  const { sub_key, unique_id } = req.body || {};
-
-  if (sub_key !== VALID_SUB_KEY) {
-    return res.status(400).json({ error: 'Invalid subscription key' });
+  if (!sub_key || !unique_id || !slug || !mo_no || !b_version || !r_id) {
+    return res.status(400).json({ message: 'Missing parameters' });
   }
 
-  res.status(200).json({
-    dData: {
-      sub_key,
-      plan_type: 'Premium',
-      end_date: '2025-06-19',
-      day_remaining: 100,
-      device_data: {
-        skd_id: 'test',
-        unique_id: 593961758817
-      }
-    }
-  });
+  if (sub_key !== VALID_KEY) {
+    return res.status(400).json({ message: 'Invalid subscription key' });
+  }
+
+  const userDeviceData = {
+    sub_key,
+    plan_type: 'Premium',
+    end_date: '2025-06-19',
+    day_remaining: 100,
+    device_data: {
+      skd_id: 'test',
+      unique_id,
+    },
+  };
+
+  return res.json({ valid: true, dData: { userDeviceData } });
 });
 
-const PORT = process.env.PORT || 3000;
+app.use((req, res) => {
+  res.status(404).json({ message: 'Not Found' });
+});
+
 app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
