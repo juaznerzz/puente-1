@@ -1,12 +1,12 @@
 {
-  "name": "dropcrm-backend",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
-  "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5"
+  "nombre" : "backend de validación de licencia " 
+  "versión" : "1.0.0" , 
+  "principal" : "index.js" , 
+  "guiones" : { 
+    "inicio" : "node index.js" 
+  } ,
+  "dependencias" : { 
+    "express" : "^4.17.1" , 
+    "cors" : "^2.8.5" 
   }
 }
