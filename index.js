@@ -21,7 +21,7 @@ app.post('/api/v1/validate', (req, res) => {
         plan_type: 'Premium',
         device_data: { skd_id: unique_id }, // ID del dispositivo
         validate: {
-          end_date: '2025-06-19T23:59:59.000Z', // Fecha de expiración
+          end_date: '2025-08-19T23:59:59.000Z', // Fecha de expiración
           day_remaining: 5, // Días restantes hasta la expiración
           life_time: false, // Si la licencia es vitalicia o no
         }
