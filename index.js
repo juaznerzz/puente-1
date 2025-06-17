@@ -1,34 +1,23 @@
-const express = require('express');
-const cors = require('cors');
+const express = require ( 'express' );
+constante cors = require ( 'cors' );
+const aplicación = express ();
+const puerto =
+ proceso.env.PORT || 3000 ;​
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+aplicación. uso ( cors ());
+aplicación.use (express.json ( ))
+ ;
 
-// Respuesta de prueba para la validación
-const demoResponse = {
-  status: 200,
-  userDeviceData: {
-    sub_key: 'demo-key',
-    plan_type: 'Premium',
-    device_data: { skd_id: 'demo-device-id' },
-    validate: { end_date: '2099-12-31', day_remaining: 9999 }
-  }
-};
-
-app.post('/api/v1/validate', (req, res) => {
-  // Cualquier clave enviada será aceptada
-  res.json(demoResponse);
+aplicación.post ( '/api/ v1 /validate' , ( req, res ) => {
+  const userDeviceData = cuerpo del req .;
+  devolver res. estado ( 200 ) .json ({
+    estado : 200 ,
+    dData : { usuarioDeviceData },
+  });
 });
 
-app.get('/api/v1/subscription-key/remove', (req, res) => {
-  res.json({ status: 200, message: 'License removed' });
+aplicación. escuchar (puerto, () => {
+  console.log ( `Servidor ejecutándose en el puerto $ {port} ` ) ;
 });
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en el puerto ${PORT}`);
-});
-
 
 
