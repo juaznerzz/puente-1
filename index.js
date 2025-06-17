@@ -4,7 +4,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const VALID_KEY = process.env.VALID_KEY || 'TEST-KEY-123';
+const VALID_KEY = process.env.VALID_KEY || '123456';
 
 app.post('/api/v1/validate', (req, res) => {
   const { sub_key, unique_id, mo_no, slug, b_version, r_id } = req.body || {};
